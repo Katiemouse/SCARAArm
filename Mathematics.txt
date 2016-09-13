@@ -53,7 +53,7 @@ Once again the position of the motors are given, with one angle. The length of t
 
 Diagram is on page 10.
 
-xj21 = xT + h . cos(π/2 - α)
-yj21 = yT + h . sin(π/2 - α)
-xj22 = xT - h . cos(π/2 - α)
-yj22 = yT - h . sin(π/2 - α)
+xj21 = (xT+xM2)/2 + h . cos(π/2 - α)
+yj21 = (yT+xM2)/2 + h . sin(π/2 - α)
+xj22 = (xT+xM2)/2 - h . cos(π/2 - α)
+yj22 = (yT+xM2)/2 - h . sin(π/2 - α)
