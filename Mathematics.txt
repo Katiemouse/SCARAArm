@@ -42,8 +42,8 @@ with α = αtan ((yj1 - yj2)/(xj2 - xj1))
 
 **/
 
-xt2 = xA + h . sin(π/2 - α)
-yt2 = yA + h . cos(π/2 - α)
+xt2 = xA - h . cos(π/2 - α)
+yt2 = yA - h . sin(π/2 - α)
 
 with α = αtan ((xj2 - xj1)/(yj1 - yj2))
 
@@ -55,5 +55,5 @@ Diagram is on page 10.
 
 xj21 = xT + h . cos(π/2 - α)
 yj21 = yT + h . sin(π/2 - α)
-xj22 = xT + h . sin(π/2 - α)
-yj22 = yT + h . cos(π/2 - α)
+xj22 = xT - h . cos(π/2 - α)
+yj22 = yT - h . sin(π/2 - α)
