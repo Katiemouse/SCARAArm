@@ -56,11 +56,11 @@ public class Arm
      */
     public Arm()
     {
-        xm1 = 290; // set motor coordinates
-        ym1 = 372;
-        xm2 = 379;
+        xm1 = 287; // set motor coordinates
+        ym1 = 374;
+        xm2 = 377;
         ym2 = 374;
-        r = 156.0;
+        r = 154.0;
         theta1 = -90.0*Math.PI/180.0; // initial angles of the upper arms
         theta2 = -90.0*Math.PI/180.0;
         valid_state = false;
@@ -124,18 +124,18 @@ public class Arm
    public void directKinematic(){
        
        // midpoint between joints
-       //double  xa =.... ;
-       //double  ya =.... ;
-       // distance between joints
-       //double d = ...;
+       double  xa =xj1+0.5*(xj2-xj1) ;
+       double  ya =yj1+0.5*(yj2-yj1);
+       // distance between joints\
+       double d = Math.sqrt(Math.power((xj2-xj1),2)+Math.power((yj2-yj1),2));
        if (d<2*r){
            valid_state = true;
          // half distance between tool positions
-         //double  h = ...;
-         //double alpha= ...;
+         double  h = Math.sqrt(Math.power(r,2)-Math.power(0.5*(xj2-xj1),2)-Math.power(0.5*(yj2-yj1),2));
+         double alpha=Math.atan((xj2-xj1)/(yj1-yj2));
          // tool position
-        // double xt = ...;
-        // double yt = ...;
+         double xt = xa+h*Math.cos(Math.PI/2.0-);
+         double yt = ...;
          //  xt2 = xa - h.*cos(alpha-pi/2);
          //  yt2 = ya - h.*sin(alpha-pi/2);
        } else {
@@ -223,11 +223,13 @@ public class Arm
     // linear intepolation
     public int get_pwm1(){
         int pwm = 0;
+        pwm=(int)(-10.74*theta1+563);
         return pwm;
     }
     // ditto for motor 2
     public int get_pwm2(){
         int pwm =0;
+         pwm=(int)(-10.74*theta2+684);
         //pwm = (int)(pwm2_90 + (theta2 - 90)*pwm2_slope);
         return pwm;
     }
