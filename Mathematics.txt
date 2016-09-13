@@ -1,0 +1,59 @@
+Direct and Indirect Kinematics equations
+
+Feel free to make corrections if I have made errors.
+
+Direct Kinematics 1 - Joint Positions
+
+Positions of motors (xm1, ym1) and (xm2, ym2) are known. Angles of upper arms (ϴ1 and ϴ2) are also known, and the length of the  arms (R).
+Joints (j1 and j2) are being calculated.
+
+Diagram on page 7 http://ecs.victoria.ac.nz/foswiki/pub/Courses/ENGR110_2016T2/Assignments/RobotArm.pdf
+
+Given:
+xj1 = xm1 + R . cos (ϴ1)
+yj1 = ym1 + R . sin (ϴ1)
+
+So: 
+xj2 = xm2 + R . cos (ϴ2)
+yj2 = ym2 + R . sin (ϴ2)
+
+Direct Kinematics 2 - Position of A 
+
+Given:
+xA = xj1 + 0.5 . (xj2 - xj1)
+
+So:
+yA = yj1 + 0.5 . (yj2 - yj1)
+
+Direct Kinematics 3 - Position of T1
+
+h = √(R^2 - (xj2 - xj1)/2) <-- feel free to double check, not 100% sure it's right but the tutor said it was so? 
+
+
+
+Direct Kinematics 4 - position of T2
+
+/**
+Position of T1 given:
+xt1 = xA + h . cos(π/2 - α)
+yt1 = yA + h . sin(π/2 - α)
+
+with α = αtan ((yj1 - yj2)/(xj2 - xj1))
+
+**/
+
+xt2 = xA + h . sin(π/2 - α)
+yt2 = yA + h . cos(π/2 - α)
+
+with α = αtan ((xj2 - xj1)/(yj1 - yj2))
+
+Indirect Kinematics 1 - Joint positions
+
+Once again the position of the motors are given, with one angle. The length of the arms are also known and the position (T) is known. The way of thinking of this is "If one of my motors is fixed and I wish my pen to be at T what angle must the other motor be set to?"
+
+Diagram is on page 10.
+
+xj21 = xT + h . cos(π/2 - α)
+yj21 = yT + h . sin(π/2 - α)
+xj22 = xT + h . sin(π/2 - α)
+yj22 = yT + h . cos(π/2 - α)
