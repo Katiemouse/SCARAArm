@@ -27,7 +27,7 @@ yA = yj1 + 0.5 . (yj2 - yj1)
 
 Direct Kinematics 3 - Position of T1
 
-h = √(R^2 - ((yj2-yj1)/2) - ((xj2-xj1)/2)) 
+h = √( R^2 - ((yj2-yj1)/2) - ((xj2-xj1)/2)) )
 
 
 
