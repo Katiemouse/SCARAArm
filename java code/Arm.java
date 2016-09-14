@@ -134,10 +134,10 @@ public class Arm
          double  h = Math.sqrt(Math.power(r,2)-Math.power(0.5*(xj2-xj1),2)-Math.power(0.5*(yj2-yj1),2));
          double alpha=Math.atan((xj2-xj1)/(yj1-yj2));
          // tool position
-         double xt = xa+h*Math.cos(Math.PI/2.0-);
-         double yt = ...;
-         //  xt2 = xa - h.*cos(alpha-pi/2);
-         //  yt2 = ya - h.*sin(alpha-pi/2);
+         double xt = xa+h*Math.cos(Math.PI/2.0-alpha);
+         double yt = ya+h*Math.sin(Math.PI/2.0-alpha);
+          xt2 = xa - h.*cos(alpha-Math.PI/2.0);
+          yt2 = ya - h.*sin(alpha-Math.PI/2.0;
        } else {
            valid_state = false;
         }
@@ -154,8 +154,8 @@ public class Arm
         valid_state = true;
         double dx1 = xt - xm1; 
         double dy1 = yt - ym1;
-        // distance between pem and motor
-        double d1 = ...;
+        // distance between pen and motor1
+        double d1 = Math.sqrt(Math.power((xt-xm1),2)+Math.power((yt-ym1),2));
         if (d1>2*r){
             //UI.println("Arm 1 - can not reach");
             valid_state = false;
@@ -165,10 +165,10 @@ public class Arm
         double l1 = d1/2;
         double h1 = Math.sqrt(r*r - d1*d1/4);
         // elbows positions
-        //xj1 = ...;
-        //yj1 = ...;
+        xj1 = xm1+h1;
+        yj1 = 0.5*l1+ym1;
 
-        ///theta1 = ...;
+        theta1 = ...;
         if ((theta1>0)||(theta1<-Math.PI)){
             valid_state = false;
             //UI.println("Ange 1 -invalid");
@@ -178,7 +178,7 @@ public class Arm
         // theta12 = atan2(yj12 - ym1,xj12-xm1);
         double dx2 = xt - xm2; 
         double dy2 = yt - ym2;
-        double d2 = ...;
+        double d2 =  Math.sqrt(Math.power((xt-xm2),2)+Math.power((yt-ym2),2));
         if (d2>2*r){
            // UI.println("Arm 2 - can not reach");
             valid_state = false;
@@ -189,7 +189,7 @@ public class Arm
         
         double h2 = Math.sqrt(r*r - d2*d2/4);
         // elbows positions
-        xj2 = ...;
+        xj2 = ;
         yj2 = ...;
         // motor angles for both 1st elbow positions
         theta2 = ...;
