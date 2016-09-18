@@ -117,7 +117,25 @@ public class ToolPath
     
     // save file with motor control values
     public void save_pwm_file(){
-        ...
+       String filename=UIFileChooser.save();
+        if(filename!=null){
+            try{
+                PrintStream ps=new PrintStream(new File(filename));
+                for(int i=0;i<pwm1_vector.size();i++){
+                   int pwm1=pwm1_vector.get(i);
+                   int pwm2=pwm2_vector.get(i);
+                   int pwm3=pwm3_vector.get(i);
+                   String pw1=pwm1.toString();
+                   String pw2=pwm2.toString();
+                   String pw3=pwm3.toString();
+                   ps.println(pw1+","+pw2+","+pw3);
+                }
+              ps.close();
+            }
+            catch(IOException e){
+                UI.printf("File Failure % \n", e);
+            }
+        }
     }
 
 }
