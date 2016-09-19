@@ -1,4 +1,3 @@
-package ToWebSite;
 
         // stores cartesian coordinates of the path points
     public class PointXY{

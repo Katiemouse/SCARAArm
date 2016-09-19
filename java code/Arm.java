@@ -130,11 +130,14 @@ public class Arm
         // distance between joints\
        
         double d = Math.sqrt(Math.pow((xj2-xj1),2.0)+Math.pow((yj2-yj1),2.0));
+        UI.println("d: "+d);
+        UI.println("2r: "+2*r);
         if (d<2*r){
             valid_state = true;
             // half distance between tool positions
-            double  h = Math.sqrt(Math.pow(r,2)-Math.pow(0.5*(xj2-xj1),2)-Math.pow(0.5*(yj2-yj1),2));
-            double alpha=Math.atan((xj2-xj1)/(yj1-yj2));
+            double  h = Math.sqrt(Math.pow(r,2)-Math.pow(0.5*(xj1-xj2),2)-Math.pow(0.5*(yj1-yj2),2));
+           // double alpha=Math.atan((xj2-xj1)/(yj1-yj2));
+            double alpha=Math.atan2(yj2-yj1, xj2-xj1);
             // tool position
             double xt = xa+h*Math.cos(Math.PI/2.0-alpha);
             double yt = ya+h*Math.sin(Math.PI/2.0-alpha);
@@ -164,25 +167,26 @@ public class Arm
             valid_state = false;
             return;
         }
-
-        double l1 = d1/2;
-        double h1 = Math.sqrt(r*r - d1*d1/4);
         
-        double beta11=Math.atan((ym1-yt)/(xt-xm1));  //the angle is between motor1-Pen line and horizontal line
+        double l1 = d1/2;
+        double h1 = Math.sqrt(r*r - l1*l1);
+        
+        double beta11=Math.atan2(yt-ym1,xm1-xt);  //the angle is between motor1-Pen line and horizontal line
         double beta12=((Math.PI)/2 - beta11);   // the angle is between "h" line and horizontal line
         double  xa1=xm1+0.5*(xt-xm1);   // the mid-point a1 between  tool and motor2
-        double  ya1=yt+0.5*(ym1-yt);   
+        double  ya1=ym1+0.5*(yt-ym1);   
 
         // elbows positions
-        xj1 = xa1-h1*(Math.cos(beta12));
-        yj1 = ya1-h1*(Math.sin(beta12)) ;
+        xj1 = xa1+h1*(Math.cos(beta12));
+        yj1 = ya1+h1*(Math.sin(beta12)) ;
 
-        theta1 = Math.atan((yt-ym1)/(xt-xm1)) ;
+       // theta1 = Math.atan((yt-ym1)/(xt-xm1)) ;
+        theta1=Math.atan2((yj1-ym1), (xj1-xm1));
       
         if ((theta1>0)||(theta1<-Math.PI)){
-            valid_state = false;
-            //UI.println("Ange 1 -invalid");
-            return;
+           valid_state = false;
+           UI.println("Ange 1 -invalid");
+           return;
         }
 
         // theta12 = atan2(yj12 - ym1,xj12-xm1);
@@ -198,25 +202,28 @@ public class Arm
         double l2 = d2/2;    
         double h2 = Math.sqrt(r*r - d2*d2/4);
 
-        double beta21=Math.atan((yt-ym2)/(xm2-xt));  //the angle is between motor2-Pen line and horizontal line
+      //  double beta21=Math.atan((yt-ym2)/(xm2-xt));  //the angle is between motor2-Pen line and horizontal line
+        double beta21=Math.atan2((yt-ym2), (xm2-xt));
         double beta22=((Math.PI)/2 - beta21);   // the angle is between "h" line and horizontal line
-        double  xa2=xt+0.5*(xm2-xt);   // the mid-point a2 between  tool and motor2
-        double  ya2=yt+0.5*(ym2-yt); 
+        double  xa2=xm2+0.5*(xt-xm2);   // the mid-point a2 between  tool and motor2
+        double  ya2=ym2+0.5*(yt-ym2); 
         
         // elbows positions
-        xj2 = xa2+h2*(Math.cos(beta22));
+        xj2 = xa2-h2*(Math.cos(beta22));
         yj2 = ya2-h2*(Math.sin(beta22));
         
         // motor angles for both 1st elbow positions
-        theta2 =Math.atan((yt-ym2)/(xt-xm2)) ;
+       // theta2 =Math.atan((yt-ym2)/(xt-xm2)) ;
+        
+       theta2 =Math.atan2((yj2-ym2),(xj2-xm2)) ;
         if ((theta2>0)||(theta2<-Math.PI)){
             valid_state = false;
-            //UI.println("Ange 2 -invalid");
+            UI.println("Ange 2 -invalid");
             return;
         }
 
-        //UI.printf("xt:%3.1f, yt:%3.1f\n",xt,yt);
-        //UI.printf("theta1:%3.1f, theta2:%3.1f\n",theta1*180/Math.PI,theta2*180/Math.PI);
+       // UI.printf("xt:%3.1f, yt:%3.1f\n",xt,yt);
+       // UI.printf("theta1:%3.1f, theta2:%3.1f\n",theta1*180/Math.PI,theta2*180/Math.PI);
         return;
     }
 
