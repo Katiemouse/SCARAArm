@@ -256,5 +256,9 @@ public class Arm
         //pwm = (int)(pwm2_90 + (theta2 - 90)*pwm2_slope);
         return pwm;
     }
+    public int get_pwm3(){
+        int pwm=1999;
+        return pwm;
+    }
 
 }

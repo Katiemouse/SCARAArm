@@ -32,7 +32,7 @@ public class Main{
         UI.addButton("Load path XY", this::load_xy);
         UI.addButton("Save path Ang", this::save_ang);
         UI.addButton("Load path Ang:Play", this::load_ang);
-
+        UI.addButton("save the pwm", this::savepwmfile);
         // UI.addButton("Quit", UI::quit);
         UI.setMouseMotionListener(this::doMouse);
         UI.setKeyListener(this::doKeys);
@@ -43,7 +43,13 @@ public class Main{
         this.run();
         arm.draw();
     }
-
+    public void savepwmfile(){
+        tool_path=new ToolPath();
+        tool_path.convert_drawing_to_angles(drawing,arm,"");
+        tool_path.convert_angles_to_pwm(arm);
+    tool_path.save_pwm_file();
+    }
+    
     public void doKeys(String action){
         UI.printf("Key :%s \n", action);
         if (action.equals("b")) {
@@ -169,6 +175,7 @@ public class Main{
 
     public void load_ang(){
     }
+    
     public void run() {
         while(true) {
             arm.draw();

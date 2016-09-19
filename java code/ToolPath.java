@@ -112,13 +112,16 @@ public class ToolPath
             arm.set_angles(theta1_vector.get(i),theta2_vector.get(i));
             int pwm1=arm.get_pwm1();
             int pwm2=arm.get_pwm2();
+            int pwm3=arm.get_pwm3();
             if(pwm1>1000&&pwm1<2000){
                 pwm1_vector.add(arm.get_pwm1());
             }
             if(pwm2>1000&&pwm2<2000){
                 pwm2_vector.add(arm.get_pwm2());
             }
-
+            
+                pwm3_vector.add(arm.get_pwm3());
+            
         }
     }
 
