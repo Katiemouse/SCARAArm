@@ -47,7 +47,7 @@ public class Arm
     private double yj2; 
     private double xt;     // position of the tool
     private double yt;
-    private boolean valid_state; // is state of the arm physically possible?
+    public boolean valid_state; // is state of the arm physically possible?
 
     /**
      * Constructor for objects of class Arm
@@ -82,7 +82,7 @@ public class Arm
         UI.setColor(Color.BLUE);
         UI.drawOval(xm1-mr/2,ym1-mr/2,mr,mr);
         UI.drawOval(xm2-mr/2,ym2-mr/2,mr,mr);
-        
+
         // write parameters of first motor        
         String out_str=String.format("t1=%3.1f",theta1*180/Math.PI);
         UI.drawString(out_str, xm1-2*mr,ym1-mr/2+2*mr);
@@ -90,7 +90,7 @@ public class Arm
         UI.drawString(out_str, xm1-2*mr,ym1-mr/2+3*mr);
         out_str=String.format("ym1=%d",ym1);
         UI.drawString(out_str, xm1-2*mr,ym1-mr/2+4*mr);
-        
+
         // ditto for second motor                
         out_str = String.format("t2=%3.1f",theta2*180/Math.PI);
         UI.drawString(out_str, xm2+2*mr,ym2-mr/2+2*mr);
@@ -98,7 +98,7 @@ public class Arm
         UI.drawString(out_str, xm2+2*mr,ym2-mr/2+3*mr);
         out_str=String.format("ym2=%d",ym2);
         UI.drawString(out_str, xm2+2*mr,ym2-mr/2+4*mr);
-        
+
         // draw Field Of View
         UI.setColor(Color.GRAY);
         UI.drawRect(0,0,640,480);
@@ -128,7 +128,7 @@ public class Arm
         double  xa =xj1+0.5*(xj2-xj1) ;
         double  ya =yj1+0.5*(yj2-yj1);
         // distance between joints\
-       
+
         double d = Math.sqrt(Math.pow((xj2-xj1),2.0)+Math.pow((yj2-yj1),2.0));
         UI.println("d: "+d);
         UI.println("2r: "+2*r);
@@ -136,14 +136,14 @@ public class Arm
             valid_state = true;
             // half distance between tool positions
             double  h = Math.sqrt(Math.pow(r,2)-Math.pow(0.5*(xj1-xj2),2)-Math.pow(0.5*(yj1-yj2),2));
-           // double alpha=Math.atan((xj2-xj1)/(yj1-yj2));
+            // double alpha=Math.atan((xj2-xj1)/(yj1-yj2));
             double alpha=Math.atan2(yj2-yj1, xj2-xj1);
             // tool position
             double xt = xa+h*Math.cos(Math.PI/2.0-alpha);
             double yt = ya+h*Math.sin(Math.PI/2.0-alpha);
             double xt2 = xa - h*Math.cos(alpha-Math.PI/2.0);
             double yt2 = ya - h*Math.sin(alpha-Math.PI/2.0);
-            
+
         } else {
             valid_state = false;
         }
@@ -157,7 +157,6 @@ public class Arm
         valid_state = true;
         xt = xt_new;
         yt = yt_new;
-        valid_state = true;
         double dx1 = xt - xm1; 
         double dy1 = yt - ym1;
         // distance between pen and motor1
@@ -167,10 +166,10 @@ public class Arm
             valid_state = false;
             return;
         }
-        
+
         double l1 = d1/2;
         double h1 = Math.sqrt(r*r - l1*l1);
-        
+
         double beta11=Math.atan2(yt-ym1,xm1-xt);  //the angle is between motor1-Pen line and horizontal line
         double beta12=((Math.PI)/2 - beta11);   // the angle is between "h" line and horizontal line
         double  xa1=xm1+0.5*(xt-xm1);   // the mid-point a1 between  tool and motor2
@@ -180,13 +179,13 @@ public class Arm
         xj1 = xa1+h1*(Math.cos(beta12));
         yj1 = ya1+h1*(Math.sin(beta12)) ;
 
-       // theta1 = Math.atan((yt-ym1)/(xt-xm1)) ;
+        // theta1 = Math.atan((yt-ym1)/(xt-xm1)) ;
         theta1=Math.atan2((yj1-ym1), (xj1-xm1));
-      
+
         if ((theta1>0)||(theta1<-Math.PI)){
-           valid_state = false;
-           UI.println("Ange 1 -invalid");
-           return;
+            valid_state = false;
+            UI.println("Ange 1 -invalid");
+            return;
         }
 
         // theta12 = atan2(yj12 - ym1,xj12-xm1);
@@ -202,28 +201,46 @@ public class Arm
         double l2 = d2/2;    
         double h2 = Math.sqrt(r*r - d2*d2/4);
 
-      //  double beta21=Math.atan((yt-ym2)/(xm2-xt));  //the angle is between motor2-Pen line and horizontal line
+        //  double beta21=Math.atan((yt-ym2)/(xm2-xt));  //the angle is between motor2-Pen line and horizontal line
         double beta21=Math.atan2((yt-ym2), (xm2-xt));
         double beta22=((Math.PI)/2 - beta21);   // the angle is between "h" line and horizontal line
         double  xa2=xm2+0.5*(xt-xm2);   // the mid-point a2 between  tool and motor2
         double  ya2=ym2+0.5*(yt-ym2); 
-        
+
         // elbows positions
         xj2 = xa2-h2*(Math.cos(beta22));
         yj2 = ya2-h2*(Math.sin(beta22));
-        
+
         // motor angles for both 1st elbow positions
-       // theta2 =Math.atan((yt-ym2)/(xt-xm2)) ;
-        
-       theta2 =Math.atan2((yj2-ym2),(xj2-xm2)) ;
+        // theta2 =Math.atan((yt-ym2)/(xt-xm2)) ;
+
+        theta2 =Math.atan2((yj2-ym2),(xj2-xm2)) ;
         if ((theta2>0)||(theta2<-Math.PI)){
             valid_state = false;
             UI.println("Ange 2 -invalid");
             return;
         }
 
-       // UI.printf("xt:%3.1f, yt:%3.1f\n",xt,yt);
-       // UI.printf("theta1:%3.1f, theta2:%3.1f\n",theta1*180/Math.PI,theta2*180/Math.PI);
+        // UI.printf("xt:%3.1f, yt:%3.1f\n",xt,yt);
+         //UI.printf("theta1:%3.1f, theta2:%3.1f\n",theta1*180/Math.PI,theta2*180/Math.PI);
+         //UI.printf("theta1 + theta2 = %3.1f\n",(theta1+theta2)*180/Math.PI);
+        
+        //solve angles
+        double a = Math.hypot(xj1-xm1, yj1-ym1);
+        double b = Math.hypot(xj1-xt, yj1-yt);
+        double c = Math.hypot(xm1-xt, ym1-yt);
+        double gamma1 = Math.acos((c*c-a*a-b*b)/(-2*a*b))*180/Math.PI;
+        
+        a = Math.hypot(xj2-xm2, yj2-ym2);
+        b = Math.hypot(xj2-xt, yj2-yt);
+        c = Math.hypot(xm2-xt, ym2-yt);
+        double gamma2 = Math.acos((c*c-a*a-b*b)/(-2*a*b))*180/Math.PI;
+        
+        UI.printf("gamma1 + gamma2 = %3.1f\n",(gamma1+gamma2));
+        if (gamma1+gamma2 <= 90) valid_state = false;
+        //else valid_state = true;
+         
+                
         return;
     }
 
@@ -256,6 +273,7 @@ public class Arm
         //pwm = (int)(pwm2_90 + (theta2 - 90)*pwm2_slope);
         return pwm;
     }
+
     public int get_pwm3(){
         int pwm=1999;
         return pwm;

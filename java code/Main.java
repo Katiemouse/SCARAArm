@@ -43,13 +43,14 @@ public class Main{
         this.run();
         arm.draw();
     }
+
     public void savepwmfile(){
         tool_path=new ToolPath();
         tool_path.convert_drawing_to_angles(drawing,arm,"");
         tool_path.convert_angles_to_pwm(arm);
-    tool_path.save_pwm_file();
+        tool_path.save_pwm_file();
     }
-    
+
     public void doKeys(String action){
         UI.printf("Key :%s \n", action);
         if (action.equals("b")) {
@@ -97,28 +98,30 @@ public class Main{
         if (   (state == 2) &&(action.equals("clicked"))){
             // add point(pen down) and draw
             UI.printf("Adding point x=%f y=%f\n",x,y);
-            drawing.add_point_to_path(x,y,true); // add point with pen down
-
             arm.inverseKinematic(x,y);
-            arm.draw();
-            drawing.draw();
-            drawing.print_path();
+            if (arm.valid_state) {
+                drawing.add_point_to_path(x,y,true); // add point with pen down
+                arm.draw();
+                drawing.draw();
+                drawing.print_path();
+            }
         }
 
         if (   (state == 3) &&(action.equals("clicked"))){
             // add point and draw
             //UI.printf("Adding point x=%f y=%f\n",x,y);
-            drawing.add_point_to_path(x,y,false); // add point wit pen up
-
             arm.inverseKinematic(x,y);
-            arm.draw();
-            drawing.draw();
-            drawing.print_path();
-            state = 2;
+            if (arm.valid_state) {
+                drawing.add_point_to_path(x,y,false); // add point wit pen up     
+                arm.draw();
+                drawing.draw();
+                drawing.print_path();
+                state = 2;
+            }
         }
 
     }
-    
+
     public void save_xy(){
         state = 0;
         String fname = UIFileChooser.save();
@@ -150,8 +153,7 @@ public class Main{
     public void save_ang(){
         String filename=UIFileChooser.save();
 
-       
-       // String filename=UIFileChooser.save();
+        // String filename=UIFileChooser.save();
         if(filename!=null){
             try{
                 tool_path.convert_drawing_to_angles(drawing,arm,filename);
@@ -175,7 +177,7 @@ public class Main{
 
     public void load_ang(){
     }
-    
+
     public void run() {
         while(true) {
             arm.draw();
