@@ -272,7 +272,7 @@ public class Arm
         int pwm =0;
         //pwm=(int)(-10.74*theta2+684);
         //pwm = (int)(pwm2_90 + (theta2 - 90)*pwm2_slope);
-        pwm=(int)(-28.57*theta2-557.14);
+        pwm=(int)(-11.6*theta2+755.14);
         return pwm;
     }
 
