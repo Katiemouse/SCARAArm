@@ -162,7 +162,7 @@ public class Arm
         // distance between pen and motor1
         double d1 = Math.sqrt(Math.pow(dx1,2)+Math.pow(dy1,2));
         if (d1>2*r){
-            //UI.println("Arm 1 - can not reach");
+            UI.println("Arm 1 - can not reach");
             valid_state = false;
             return;
         }
@@ -193,7 +193,7 @@ public class Arm
         double dy2 = yt - ym2;
         double d2 =  Math.sqrt(Math.pow(dx2,2)+Math.pow(dy2,2));
         if (d2>2*r){
-            // UI.println("Arm 2 - can not reach");
+             UI.println("Arm 2 - can not reach");
             valid_state = false;
             return;
         }
@@ -236,7 +236,7 @@ public class Arm
         c = Math.hypot(xm2-xt, ym2-yt);
         double gamma2 = Math.acos((c*c-a*a-b*b)/(-2*a*b))*180/Math.PI;
         
-        UI.printf("gamma1 + gamma2 = %3.1f\n",(gamma1+gamma2));
+        //UI.printf("gamma1 + gamma2 = %3.1f\n",(gamma1+gamma2));
         if (gamma1+gamma2 <= 90) valid_state = false;
         //else valid_state = true;
          
@@ -263,14 +263,16 @@ public class Arm
     // linear intepolation
     public int get_pwm1(){
         int pwm = 0;
-        pwm=(int)(-10.74*theta1+563);
+        //pwm=(int)(-10.74*theta1+563);
+        pwm=(int)(-10.35*theta1+240.8);
         return pwm;
     }
     // ditto for motor 2
     public int get_pwm2(){
         int pwm =0;
-        pwm=(int)(-10.74*theta2+684);
+        //pwm=(int)(-10.74*theta2+684);
         //pwm = (int)(pwm2_90 + (theta2 - 90)*pwm2_slope);
+        pwm=(int)(-28.57*theta2-557.14);
         return pwm;
     }
 
