@@ -22,7 +22,7 @@ public class Main{
     // 1 - inverse point kinematics - point
     // 2 - enter path. Each click adds point  
     // 3 - enter path pause. Click does not add the point to the path
-
+    private int lastState;
     /**      */
     public Main(){
         UI.initialise();
@@ -33,6 +33,7 @@ public class Main{
         UI.addButton("Save path Ang", this::save_ang);
         UI.addButton("Load path Ang:Play", this::load_ang);
         UI.addButton("save the pwm", this::savepwmfile);
+        UI.addButton("smoth drawing",()->{state=4;});
         // UI.addButton("Quit", UI::quit);
         UI.setMouseMotionListener(this::doMouse);
         UI.setKeyListener(this::doKeys);
@@ -55,7 +56,10 @@ public class Main{
         UI.printf("Key :%s \n", action);
         if (action.equals("b")) {
             // break - stop entering the lines
+            lastState=state;
+
             state = 3;
+            
             //
 
         }
@@ -77,13 +81,13 @@ public class Main{
             return;
         }
 
-        if ( ((state == 2)||(state == 3))&&action.equals("moved") ){
+        if ( ((state == 2)||(state == 3)||(state==4))&&action.equals("moved") ){
             // draw arm and path
             arm.inverseKinematic(x,y);
             arm.draw();
 
             // draw segment from last entered point to current mouse position
-            if ((state == 2)&&(drawing.get_path_size()>0)){
+            if (((state == 2)||(state==4))&&(drawing.get_path_size()>0)){
                 PointXY lp = new PointXY();
                 lp = drawing.get_path_last_point();
                 //if (lp.get_pen()){
@@ -107,19 +111,37 @@ public class Main{
             }
         }
 
-        if (   (state == 3) &&(action.equals("clicked"))){
+        if (   (state == 3) &&(action.equals("pressed"))){
             // add point and draw
             //UI.printf("Adding point x=%f y=%f\n",x,y);
+            state = lastState;
             arm.inverseKinematic(x,y);
             if (arm.valid_state) {
                 drawing.add_point_to_path(x,y,false); // add point wit pen up     
                 arm.draw();
                 drawing.draw();
                 drawing.print_path();
-                state = 2;
+                
             }
         }
-
+        if(  (state == 4) &&(action.equals("pressed"))){
+            arm.inverseKinematic(x,y);
+            if (arm.valid_state) {
+                drawing.add_point_to_path(x,y,true); // add point with pen down
+                arm.draw();
+                drawing.draw();
+                drawing.print_path();
+            }
+        }
+        if (   (state == 4) &&(action.equals("dragged"))){
+            arm.inverseKinematic(x,y);
+            if (arm.valid_state) {
+                drawing.add_point_to_path(x,y,true); // add point with pen down
+                arm.draw();
+                drawing.draw();
+                drawing.print_path();
+            }
+        }
     }
 
     public void save_xy(){
