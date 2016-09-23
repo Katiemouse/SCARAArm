@@ -78,7 +78,7 @@ public class Arm
 
         //draw motors and write angles
         int mr = 20;
-        UI.setLineWidth(5);
+        UI.setLineWidth(1);
         UI.setColor(Color.BLUE);
         UI.drawOval(xm1-mr/2,ym1-mr/2,mr,mr);
         UI.drawOval(xm2-mr/2,ym2-mr/2,mr,mr);
@@ -162,7 +162,7 @@ public class Arm
         // distance between pen and motor1
         double d1 = Math.sqrt(Math.pow(dx1,2)+Math.pow(dy1,2));
         if (d1>2*r){
-            UI.println("Arm 1 - can not reach");
+            //UI.println("Arm 1 - can not reach");
             valid_state = false;
             return;
         }
@@ -193,7 +193,7 @@ public class Arm
         double dy2 = yt - ym2;
         double d2 =  Math.sqrt(Math.pow(dx2,2)+Math.pow(dy2,2));
         if (d2>2*r){
-             UI.println("Arm 2 - can not reach");
+            // UI.println("Arm 2 - can not reach");
             valid_state = false;
             return;
         }
@@ -263,16 +263,15 @@ public class Arm
     // linear intepolation
     public int get_pwm1(){
         int pwm = 0;
-        //pwm=(int)(-10.74*theta1+563);
-        pwm=(int)(-10.35*theta1+240.8);
+        pwm=(int)(-10.29689*theta1+76.66);
         return pwm;
     }
     // ditto for motor 2
     public int get_pwm2(){
         int pwm =0;
-        //pwm=(int)(-10.74*theta2+684);
+        pwm=(int)(-11.194114*theta2+779.32334);
+        //pwm=(int)(-10.83*theta2+500.16);
         //pwm = (int)(pwm2_90 + (theta2 - 90)*pwm2_slope);
-        pwm=(int)(-11.6*theta2+755.14);
         return pwm;
     }
 

@@ -9,6 +9,8 @@ import ecs100.*;
 import java.util.*;
 import java.io.*;
 import java.awt.*;
+import java.awt.image.*;
+import javax.imageio.ImageIO;
 
 /** <description of class Main>
  */
@@ -34,6 +36,9 @@ public class Main{
         UI.addButton("Load path Ang:Play", this::load_ang);
         UI.addButton("save the pwm", this::savepwmfile);
         UI.addButton("smoth drawing",()->{state=4;});
+        UI.addButton("square", this::doSquare);
+        UI.addButton("circle", this::doCircle);
+        UI.addButton("image", this::loadImage);
         // UI.addButton("Quit", UI::quit);
         UI.setMouseMotionListener(this::doMouse);
         UI.setKeyListener(this::doKeys);
@@ -59,10 +64,120 @@ public class Main{
             lastState=state;
 
             state = 3;
-            
+
             //
 
         }
+
+    }
+
+    public void doSquare() {
+        doMouse("clicked", 267, 147);
+        doMouse("clicked", 327, 147);
+        doMouse("clicked", 327, 227);
+        doMouse("clicked", 267, 207);
+        doMouse("clicked", 267, 147);
+    }
+
+    public void doCircle(){
+        double centreX = 340;
+        double centreY = 140;
+        double a = 38.0;
+        double b = 35.0;
+        double r = 37.5;
+        for (double x = centreX-a; x < centreX+a; x+=10) {
+            double y = Math.sqrt(b*b*(1-(Math.pow(x-centreX,2)/a/a)))+centreY;
+            doMouse("clicked", x, y);
+        }
+        for (double x = centreX+a; x >= centreX-a; x-=10) {
+            double y = -Math.sqrt(b*b*(1-(Math.pow(x-centreX,2)/a/a)))+centreY;
+            doMouse("clicked", x, y);
+        }
+        for (double x = centreX-a; x <= centreX+a; x+=10) {
+            double y = Math.sqrt(b*b*(1-(Math.pow(x-centreX,2)/a/a)))+centreY;
+            doMouse("clicked", x, y);
+        }
+
+    }
+
+    public void loadImage() {
+
+        try{
+            BufferedImage image = ImageIO.read(new File("elf.jpg"));
+            int [][] pixels = new int[image.getWidth()][];
+
+            for (int x = 0; x < image.getWidth(); x++) {
+                pixels[x] = new int[image.getHeight()];
+
+                for (int y = 0; y < image.getHeight(); y++) {
+                    pixels[x][y] = (int) (image.getRGB(x, y) == 0xFFFFFFFF ? 0 : 1);
+                }
+            }
+
+            double left = 240;
+            double top = 100;
+            double scale = 1;
+            int lastValue = 0;
+            int count = 0;
+
+            for (int row = 0; row < pixels.length; row++) {
+                if (row %2 == 0){
+                    for (int col = 0; col < pixels[0].length; col++) {
+
+                        int currentValue = pixels[row][col];
+                        if (lastValue != currentValue ) {
+                            if (currentValue == 1) {
+                                lastState=state;
+                                state = 3;
+                                state = lastState;
+                                arm.inverseKinematic(left+col,top+row);
+                                if (arm.valid_state) {
+                                    drawing.add_point_to_path(left+col,top+row,false); // add point wit pen up     
+                                }
+                            }
+                            else {
+                                arm.inverseKinematic(left+col,top+row);
+                                if (arm.valid_state) {
+                                    drawing.add_point_to_path(left+col,top+row,true); // add point with pen down
+                                }
+                            }
+                            lastValue = currentValue;
+                            count++;
+                        }
+
+                    }
+                }
+                else {
+                    for (int col = pixels[0].length-1; col >= 0; col--) {
+
+                        int currentValue = pixels[row][col];
+                        if (lastValue != currentValue ) {
+                            if (currentValue == 1) {
+                                lastState=state;
+                                state = 3;
+                                state = lastState;
+                                arm.inverseKinematic(left+col,top+row);
+                                if (arm.valid_state) {
+                                    drawing.add_point_to_path(left+col,top+row,false); // add point wit pen up     
+                                }
+                            }
+                            else {
+                                arm.inverseKinematic(left+col,top+row);
+                                if (arm.valid_state) {
+                                    drawing.add_point_to_path(left+col,top+row,true); // add point with pen down
+                                }
+                            }
+                            lastValue = currentValue;
+                            count++;
+                        }
+
+                    }
+                }
+            }
+            UI.println(count);
+            UI.printMessage("DONE");
+        }
+        catch (IOException e) {UI.println("File loading failed: "+e);}       
 
     }
 
@@ -121,7 +236,7 @@ public class Main{
                 arm.draw();
                 drawing.draw();
                 drawing.print_path();
-                
+
             }
         }
         if(  (state == 4) &&(action.equals("pressed"))){

@@ -46,7 +46,7 @@ public class ToolPath
     public ToolPath()
     {
         // initialise instance variables
-        n_steps = 50;
+        n_steps = 1;
         theta1_vector = new ArrayList<Double>();
         theta2_vector = new ArrayList<Double>();
         pen_vector = new ArrayList<Integer>();
@@ -70,7 +70,7 @@ public class ToolPath
                 arm.inverseKinematic(x, y);
                 theta1_vector.add(arm.get_theta1()*180/Math.PI);
                 theta2_vector.add(arm.get_theta2()*180/Math.PI);
-                if (p0.get_pen()){ 
+                if (p1.get_pen()){ 
                     pen_vector.add(1);
                 } else {
                     pen_vector.add(0);
@@ -119,8 +119,8 @@ public class ToolPath
             if(pwm2>1000&&pwm2<2000){
                 pwm2_vector.add(arm.get_pwm2());
             }
-            if (pen_vector.get(i) == 1) pwm3_vector.add(1000);
-            else pwm3_vector.add(2000);
+            if (pen_vector.get(i) == 1) pwm3_vector.add(1200);
+            else pwm3_vector.add(1700);
             
         }
     }

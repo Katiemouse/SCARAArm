@@ -63,7 +63,8 @@ public class Drawing
             if (path.get(i).get_pen()){
                 UI.setColor(Color.BLUE); //pen down part
             } else {
-                UI.setColor(Color.LIGHT_GRAY); // pen uo
+                continue;
+                //UI.setColor(Color.LIGHT_GRAY); // pen uo
             }
             UI.drawLine(p0.get_x(), p0.get_y(), p1.get_x(), p1.get_y());
 
@@ -128,6 +129,7 @@ public class Drawing
                 double y = Double.parseDouble(tokens[1]);
                 boolean pen = (Integer.parseInt(tokens[2]) == 1) ;
                 add_point_to_path(x,y,pen);
+                
             }       
         }catch(Exception e){
 
