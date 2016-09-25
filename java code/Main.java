@@ -103,14 +103,15 @@ public class Main{
     public void loadImage() {
 
         try{
-            BufferedImage image = ImageIO.read(new File("elf.jpg"));
+            BufferedImage image = ImageIO.read(new File("elf3.jpg"));
             int [][] pixels = new int[image.getWidth()][];
 
             for (int x = 0; x < image.getWidth(); x++) {
                 pixels[x] = new int[image.getHeight()];
 
                 for (int y = 0; y < image.getHeight(); y++) {
-                    pixels[x][y] = (int) (image.getRGB(x, y) == 0xFFFFFFFF ? 0 : 1);
+                    pixels[x][y] = (int) (image.getRGB(x, y) > -12000000 ? 0 : 1);
+                    UI.println(image.getRGB(x, y));
                 }
             }
 
