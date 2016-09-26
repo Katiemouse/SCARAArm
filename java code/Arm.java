@@ -263,13 +263,13 @@ public class Arm
     // linear intepolation
     public int get_pwm1(){
         int pwm = 0;
-        pwm=(int)(-10.29689*theta1+76.66);
+        pwm=(int)(-10.37037037037037037037037*theta1+186.29);
         return pwm;
     }
     // ditto for motor 2
     public int get_pwm2(){
         int pwm =0;
-        pwm=(int)(-11.194114*theta2+779.32334);
+        pwm=(int)(-10.0*theta2+880.0);
         //pwm=(int)(-10.83*theta2+500.16);
         //pwm = (int)(pwm2_90 + (theta2 - 90)*pwm2_slope);
         return pwm;
