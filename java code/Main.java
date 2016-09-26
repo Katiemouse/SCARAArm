@@ -39,6 +39,7 @@ public class Main{
         UI.addButton("square", this::doSquare);
         UI.addButton("circle", this::doCircle);
         UI.addButton("image", this::loadImage);
+        UI.addButton("transfer text file", this::fileTransfer);
         // UI.addButton("Quit", UI::quit);
         UI.setMouseMotionListener(this::doMouse);
         UI.setKeyListener(this::doKeys);
@@ -48,6 +49,47 @@ public class Main{
         this.drawing = new Drawing();
         this.run();
         arm.draw();
+    }
+
+    public void fileTransfer(){
+        String s = UIFileChooser.open();
+
+        try {
+            ProcessBuilder builder = new ProcessBuilder("script", "test", "-c","scp " + s + " pi@10.140.163.125:/home/pi/Arm");
+            Process p = builder.start();
+            //DOES NOT WORK ON WINDOWS, ONLY UNIX
+            InputStream in = p.getInputStream();
+            Scanner sc = new Scanner(in);
+            BufferedWriter stdOutput = new BufferedWriter(new
+                    OutputStreamWriter(p.getOutputStream()));
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(p.getErrorStream()));
+
+            //stdOutput.write("\n");
+            //stdOutput.flush();
+            // read the output from the command
+            UI.println("Here is the standard output of the command:\n");
+            while (p.isAlive()) {
+                s = sc.next();
+                UI.println(s);
+                if (s != null && s.contains("password")) {
+                    stdOutput.write("pi\n");
+                    stdOutput.flush();
+                }
+            }
+
+            // read any errors from the attempted command
+            UI.println("Here is the standard error of the command (if any):\n");
+            while ((s = stdError.readLine()) != null) {
+                UI.println(s);
+            }
+
+            //            System.exit(0);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void savepwmfile(){
@@ -82,18 +124,18 @@ public class Main{
     public void doCircle(){
         double centreX = 340;
         double centreY = 140;
-        double a = 38.0;
+        double a = 35.0;
         double b = 35.0;
         double r = 37.5;
-        for (double x = centreX-a; x < centreX+a; x+=10) {
+        for (double x = centreX-a; x < centreX+a; x+=5) {
             double y = Math.sqrt(b*b*(1-(Math.pow(x-centreX,2)/a/a)))+centreY;
             doMouse("clicked", x, y);
         }
-        for (double x = centreX+a; x >= centreX-a; x-=10) {
+        for (double x = centreX+a; x >= centreX-a; x-=5) {
             double y = -Math.sqrt(b*b*(1-(Math.pow(x-centreX,2)/a/a)))+centreY;
             doMouse("clicked", x, y);
         }
-        for (double x = centreX-a; x <= centreX+a; x+=10) {
+        for (double x = centreX-a; x <= centreX+a; x+=5) {
             double y = Math.sqrt(b*b*(1-(Math.pow(x-centreX,2)/a/a)))+centreY;
             doMouse("clicked", x, y);
         }
@@ -103,7 +145,7 @@ public class Main{
     public void loadImage() {
 
         try{
-            BufferedImage image = ImageIO.read(new File("elf3.jpg"));
+            BufferedImage image = ImageIO.read(new File("betterelf.jpg"));
             int [][] pixels = new int[image.getWidth()][];
 
             for (int x = 0; x < image.getWidth(); x++) {
