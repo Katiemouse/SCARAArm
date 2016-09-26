@@ -46,7 +46,7 @@ public class ToolPath
     public ToolPath()
     {
         // initialise instance variables
-        n_steps = 1;
+        n_steps = 10;
         theta1_vector = new ArrayList<Double>();
         theta2_vector = new ArrayList<Double>();
         pen_vector = new ArrayList<Integer>();
@@ -119,8 +119,8 @@ public class ToolPath
             if(pwm2>1000&&pwm2<2000){
                 pwm2_vector.add(arm.get_pwm2());
             }
-            if (pen_vector.get(i) == 1) pwm3_vector.add(1200);
-            else pwm3_vector.add(1700);
+            if (pen_vector.get(i) == 1) pwm3_vector.add(2000);
+            else pwm3_vector.add(1000);
             
         }
     }
